@@ -93,8 +93,14 @@ void ModelLoader::initializeBuffers() {
 }
 
 void ModelLoader::render() {
+    glColor4f(color.x, color.y, color.z, 1);
+
+    glEnable (GL_COLOR_MATERIAL);
+    glColorMaterial (GL_FRONT, GL_DIFFUSE);
+    glColorMaterial (GL_FRONT, GL_SPECULAR);
+    glColorMaterial (GL_FRONT, GL_AMBIENT);
+
     glEnableClientState(GL_NORMAL_ARRAY);
-    glColor3f(color.x, color.y, color.z);
 
     glBindBuffer(GL_ARRAY_BUFFER, vertex_VBO);
     glVertexPointer(3, GL_FLOAT, 0, nullptr);

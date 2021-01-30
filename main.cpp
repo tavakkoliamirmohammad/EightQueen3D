@@ -83,7 +83,7 @@ void render_scene() {
     for (auto &obj : objs) {
         glLoadIdentity();
         glTranslatef(obj.position.x, obj.position.y, obj.position.z);
-        glScalef(0.5, -0.5, 0.5);
+        glScalef(0.5, 0.5, 0.5);
         obj.render();
     }
 
@@ -107,7 +107,7 @@ void init() {
     glewInit();
 
     for (int i = 0; i < 4; i++) {
-        objs.emplace_back("chess.obj", glm::vec3(2 * (i - 1.5), 0, 0), glm::vec3(1, 0, 0));
+        objs.emplace_back("untitled.obj", glm::vec3(2 * (i - 1.5), 0, 0), glm::vec3(1, 1, 1));
     }
 
     glClearColor(1.0, 1.0, 1.0, 1.0);
@@ -162,10 +162,10 @@ void init() {
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
 
-    float light_diffuse[] = {1, 0, 0, 0};
-    float light_specular[] = {0, 1, 0, 0};
-    float light_ambient[] = {0, 0, 1, 0};
-    float light_pos[] = {3, 3, 3, 1};
+    float light_ambient[] = {0.1f, 0.1f, 0.1f, 0.2f};
+    float light_diffuse[] = {0.8f, 0.8f, 0.8f, 0};
+    float light_specular[] = {0.5f, 0.5f, 0.5f, 0.2f};
+    float light_pos[] = {200.0f, 300.0f, -400.0f, 1.0f};
 
     glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
     glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
@@ -197,7 +197,7 @@ void keyboardFunc(int key, int x, int y) {
 
 int main(int argc, char **argv) {
     glutInit(&argc, argv);
-    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);
     glutInitWindowSize(800, 600);
     glutCreateWindow("Test OpenGL");
 
