@@ -3,9 +3,7 @@
 #include <GL/glut.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include "Model.h"
-#include "ChessBoard.h"
-#include "Queen.h"
+#include "ChessGame.h"
 
 int init_time = 0;
 float camera_theta = 0;
@@ -23,8 +21,7 @@ GLuint vbo_floor_indices = 0;
 
 GLuint fboID, texID, depthID;
 
-vector<Model> objs;
-ChessBoard chessBoard;
+ChessGame chessGame;
 
 
 void camera_config(int w, int h, float t, float fov) {
@@ -47,7 +44,6 @@ void render_scene() {
     glClear(GL_COLOR_BUFFER_BIT);
     glClear(GL_DEPTH_BUFFER_BIT);
 
-    srand(1);
 
     glPushAttrib(GL_LINE_BIT);
     glLineWidth(3);
@@ -64,32 +60,11 @@ void render_scene() {
     glEnd();
     glPopAttrib();
 
-//    glPushAttrib(GL_ALL_ATTRIB_BITS);
-//    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-//    glColor3f(0.0, 0.0, 0.0);
-
-//    glBindBuffer(GL_ARRAY_BUFFER, NULL);
-//    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, NULL);
-//    glVertexPointer(3, GL_FLOAT, 0, floor_vertices);
-//    glDrawElements(GL_QUADS, sizeof(floor_vertices_indice) / 4, GL_UNSIGNED_INT, floor_vertices_indice);
-//
-//    glBindBuffer(GL_ARRAY_BUFFER, vbo_floor);
-//    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo_floor_indices);
-//    glVertexPointer(3, GL_FLOAT, 0, NULL);
-//    glDrawElements(GL_QUADS, sizeof(floor_vertices_indice) / 4, GL_UNSIGNED_INT, NULL);
-
-//    glPopAttrib();
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
     glPushMatrix();
-    for (auto &obj : objs) {
-        obj.render();
-    }
-    glPopMatrix();
-
-    glPushMatrix();
-    chessBoard.render();
+    chessGame.render();
     glPopMatrix();
 }
 
@@ -108,14 +83,15 @@ void render() {
 
 void init() {
     glewInit();
+    glClearColor(0.6, 0.6, 0.6, 1.0);
 
-    for (int i = 0; i < 4; i++) {
-        objs.emplace_back(Queen(glm::vec3(2 * (i - 1.5), 0, 0)));
-    }
+    chessGame = ChessGame(1, glm::vec3(-2, 0, -2));
+//    for (int i = 0; i < 4; i++) {
+//        objs.emplace_back(Queen(glm::vec3(2 * (i - 1.5), 0, 0)));
+//    }
+//
+//    chessBoard = ChessBoard(1, glm::vec3(3, 0, 0));
 
-    chessBoard = ChessBoard(1, glm::vec3(3, 0, 0));
-
-    glClearColor(1.0, 1.0, 1.0, 1.0);
 
     glEnable(GL_DEPTH_TEST);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

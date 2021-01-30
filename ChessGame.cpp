@@ -1,0 +1,50 @@
+#include "ChessGame.h"
+#include <glm/glm.hpp>
+#include <random>
+#include <iostream>
+
+using namespace std;
+
+ChessGame::ChessGame() {}
+
+ChessGame::ChessGame(float side, glm::vec3 start) {
+    chessBoard = ChessBoard(side, start);
+    for (int i = 0; i < 8; ++i) {
+        std::pair<int, int> location;
+        do {
+            location = getRandomPosition();
+        } while (!isPositionAvailable(location));
+        storePosition(location);
+        queens.emplace_back(Queen(start + glm::vec3(location.first * side, 0, location.second * side)));
+    }
+}
+
+bool ChessGame::isPositionAvailable(std::pair<int, int> location) {
+    return queenPositions.find(location) == queenPositions.end();
+}
+
+void ChessGame::storePosition(std::pair<int, int> location) {
+    queenPositions.insert(location);
+}
+
+int randU(int nMin, int nMax) {
+    std::random_device dev;
+    std::mt19937 rng(dev());
+    std::uniform_int_distribution<std::mt19937::result_type> dist6(0, 7);
+    return dist6(rng);
+}
+
+std::pair<int, int> ChessGame::getRandomPosition() {
+    return make_pair(randU(0, 8), randU(0, 8));
+}
+
+void ChessGame::render() {
+    chessBoard.render();
+    for (auto queen: queens) {
+        glPushMatrix();
+        queen.render();
+        glPopMatrix();
+    }
+}
+
+

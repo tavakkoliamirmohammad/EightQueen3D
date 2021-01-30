@@ -19,7 +19,6 @@ private:
     float side;
     glm::vec3 position;
     std::vector<ChessTile> chessTiles;
-    std::vector<Queen> queens;
 };
 
 #endif //CHESSFINALPROJECT_CHESSBOARD_H
