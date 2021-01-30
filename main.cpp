@@ -89,7 +89,7 @@ void pickItems(int button, int state, int x, int y) {
     glMatrixMode(GL_PROJECTION);
     glPushMatrix();
     glLoadIdentity();
-    gluPickMatrix((GLdouble) x, (GLdouble) (viewport[3] - y), 5.0, 5.0, viewport);
+    gluPickMatrix((GLdouble) x, (GLdouble) (viewport[3] - y), 10.0, 10.0, viewport);
 
     auto w = glutGet(GLUT_WINDOW_WIDTH);
     auto h = glutGet(GLUT_WINDOW_HEIGHT);
@@ -98,7 +98,7 @@ void pickItems(int button, int state, int x, int y) {
     render_scene();
 
     glPopMatrix();
-    glFlush();
+    glutSwapBuffers();
 
     hits = glRenderMode(GL_RENDER);
     processHits(hits, selectBuf);
