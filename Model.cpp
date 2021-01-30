@@ -30,6 +30,8 @@ void Model::initializeBuffers() {
 }
 
 void Model::render() {
+    glPushMatrix();
+    glTranslatef(position.x, position.y, position.z);
     glColor4f(color.x, color.y, color.z, 1);
 
     glEnable (GL_COLOR_MATERIAL);
@@ -51,6 +53,7 @@ void Model::render() {
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    glPopMatrix();
 
 
 }

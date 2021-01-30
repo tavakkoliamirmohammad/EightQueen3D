@@ -5,6 +5,8 @@
 
 class ObjectModel : public Model {
 public:
+    ObjectModel();
+
     ObjectModel(const string &path, glm::vec3 position, glm::vec3 color);
 
 private:

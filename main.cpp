@@ -81,13 +81,11 @@ void render_scene() {
 //    glPopAttrib();
 
     glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
     glPushMatrix();
-//    for (auto &obj : objs) {
-//        glLoadIdentity();
-//        glTranslatef(obj.position.x, obj.position.y, obj.position.z);
-////        glScalef(0.5, 0.5, 0.5);
-//        obj.render();
-//    }
+    for (auto &obj : objs) {
+        obj.render();
+    }
     glPopMatrix();
 
     glPushMatrix();
@@ -111,12 +109,11 @@ void render() {
 void init() {
     glewInit();
 
-    for (int i = 0; i < 1; i++) {
-//        objs.emplace_back(Queen(glm::vec3(2 * (i - 1.5), 0, 0)));
-        objs.emplace_back(Queen(glm::vec3(0, 0, 0)));
+    for (int i = 0; i < 4; i++) {
+        objs.emplace_back(Queen(glm::vec3(2 * (i - 1.5), 0, 0)));
     }
 
-    chessBoard = ChessBoard(1, glm::vec3(0, 0, 0));
+    chessBoard = ChessBoard(1, glm::vec3(3, 0, 0));
 
     glClearColor(1.0, 1.0, 1.0, 1.0);
 

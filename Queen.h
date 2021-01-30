@@ -3,8 +3,10 @@
 
 #include "ObjectModel.h"
 
-class Queen: public ObjectModel{
+class Queen : public ObjectModel {
 public:
+    Queen();
+
     Queen(glm::vec3 position);
 };
 

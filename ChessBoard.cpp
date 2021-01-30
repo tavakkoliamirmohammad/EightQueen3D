@@ -10,7 +10,7 @@ ChessBoard::ChessBoard(float side, glm::vec3 position) {
     for (int i = 0; i < 8; i++) {
         isBlack = pattern;
         for (int j = 0; j < 8; j++) {
-            chessTiles.emplace_back(ChessTile(side, position + glm::vec3(i * side, 0, j * side),
+            chessTiles.emplace_back(ChessTile(side, glm::vec3(i * side, 0, j * side),
                                               isBlack ? TileColor::Black
                                                       : TileColor::White));
             isBlack = !isBlack;
@@ -20,10 +20,10 @@ ChessBoard::ChessBoard(float side, glm::vec3 position) {
 }
 
 void ChessBoard::render() {
+    glPushMatrix();
+    glTranslatef(position.x, position.y, position.z);
     for (auto &tile : chessTiles) {
-        glPushMatrix();
-        glTranslatef(tile.position.x, tile.position.y, tile.position.z);
         tile.render();
-        glPopMatrix();
     }
+    glPopMatrix();
 }
