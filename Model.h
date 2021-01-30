@@ -5,10 +5,11 @@
 #include <vector>
 #include <glm/glm.hpp>
 #include <GL/glut.h>
+#include "Renderable.h"
 
 using namespace std;
 
-class Model {
+class Model : public Renderable {
 public:
     Model();
 
@@ -17,8 +18,7 @@ public:
     glm::vec3 position;
     glm::vec3 color;
 
-    void render();
-
+    void render() override;
 
 protected:
     void initializeBuffers();

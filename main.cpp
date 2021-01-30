@@ -4,6 +4,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include "Model.h"
+#include "ChessBoard.h"
 #include "Queen.h"
 
 int init_time = 0;
@@ -23,6 +24,7 @@ GLuint vbo_floor_indices = 0;
 GLuint fboID, texID, depthID;
 
 vector<Model> objs;
+ChessBoard chessBoard;
 
 
 void camera_config(int w, int h, float t, float fov) {
@@ -62,32 +64,34 @@ void render_scene() {
     glEnd();
     glPopAttrib();
 
-    glPushAttrib(GL_ALL_ATTRIB_BITS);
-    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-    glColor3f(0.0, 0.0, 0.0);
+//    glPushAttrib(GL_ALL_ATTRIB_BITS);
+//    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+//    glColor3f(0.0, 0.0, 0.0);
 
-    glBindBuffer(GL_ARRAY_BUFFER, NULL);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, NULL);
-    glVertexPointer(3, GL_FLOAT, 0, floor_vertices);
-    glDrawElements(GL_QUADS, sizeof(floor_vertices_indice) / 4, GL_UNSIGNED_INT, floor_vertices_indice);
+//    glBindBuffer(GL_ARRAY_BUFFER, NULL);
+//    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, NULL);
+//    glVertexPointer(3, GL_FLOAT, 0, floor_vertices);
+//    glDrawElements(GL_QUADS, sizeof(floor_vertices_indice) / 4, GL_UNSIGNED_INT, floor_vertices_indice);
+//
+//    glBindBuffer(GL_ARRAY_BUFFER, vbo_floor);
+//    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo_floor_indices);
+//    glVertexPointer(3, GL_FLOAT, 0, NULL);
+//    glDrawElements(GL_QUADS, sizeof(floor_vertices_indice) / 4, GL_UNSIGNED_INT, NULL);
 
-    glBindBuffer(GL_ARRAY_BUFFER, vbo_floor);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo_floor_indices);
-    glVertexPointer(3, GL_FLOAT, 0, NULL);
-    glDrawElements(GL_QUADS, sizeof(floor_vertices_indice) / 4, GL_UNSIGNED_INT, NULL);
-
-    glPopAttrib();
+//    glPopAttrib();
 
     glMatrixMode(GL_MODELVIEW);
     glPushMatrix();
+//    for (auto &obj : objs) {
+//        glLoadIdentity();
+//        glTranslatef(obj.position.x, obj.position.y, obj.position.z);
+////        glScalef(0.5, 0.5, 0.5);
+//        obj.render();
+//    }
+    glPopMatrix();
 
-    for (auto &obj : objs) {
-        glLoadIdentity();
-        glTranslatef(obj.position.x, obj.position.y, obj.position.z);
-        glScalef(0.5, 0.5, 0.5);
-        obj.render();
-    }
-
+    glPushMatrix();
+    chessBoard.render();
     glPopMatrix();
 }
 
@@ -107,9 +111,12 @@ void render() {
 void init() {
     glewInit();
 
-    for (int i = 0; i < 4; i++) {
-        objs.emplace_back(Queen(glm::vec3(2 * (i - 1.5), 0, 0)));
+    for (int i = 0; i < 1; i++) {
+//        objs.emplace_back(Queen(glm::vec3(2 * (i - 1.5), 0, 0)));
+        objs.emplace_back(Queen(glm::vec3(0, 0, 0)));
     }
+
+    chessBoard = ChessBoard(1, glm::vec3(0, 0, 0));
 
     glClearColor(1.0, 1.0, 1.0, 1.0);
 
