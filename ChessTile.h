@@ -9,7 +9,7 @@ enum class TileColor {
 
 class ChessTile : public Model {
 public:
-    ChessTile(float side, glm::vec3 position, TileColor tileColor);
+    ChessTile(float side, glm::vec3 position, TileColor tileColor, int &name);
 };
 
 #endif //CHESSFINALPROJECT_CHESSTILE_H

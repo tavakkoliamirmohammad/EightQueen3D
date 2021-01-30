@@ -7,9 +7,11 @@ Model::Model() {
 
 }
 
-Model::Model(glm::vec3 position, glm::vec3 color) {
+Model::Model(glm::vec3 position, glm::vec3 color, int &name) : Selectable(name) {
     this->position = position;
     this->color = color;
+    this->originalColor = color;
+    ++name;
 }
 
 void Model::initializeBuffers() {
@@ -34,10 +36,10 @@ void Model::render() {
     glTranslatef(position.x, position.y, position.z);
     glColor4f(color.x, color.y, color.z, 1);
 
-    glEnable (GL_COLOR_MATERIAL);
-    glColorMaterial (GL_FRONT, GL_DIFFUSE);
-    glColorMaterial (GL_FRONT, GL_SPECULAR);
-    glColorMaterial (GL_FRONT, GL_AMBIENT);
+    glEnable(GL_COLOR_MATERIAL);
+    glColorMaterial(GL_FRONT, GL_DIFFUSE);
+    glColorMaterial(GL_FRONT, GL_SPECULAR);
+    glColorMaterial(GL_FRONT, GL_AMBIENT);
 
     glEnableClientState(GL_NORMAL_ARRAY);
 
@@ -55,5 +57,14 @@ void Model::render() {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     glPopMatrix();
 
+
+}
+
+void Model::onSelect(bool isSelected) {
+    if (isSelected) {
+        color = selectColor;
+    } else {
+        color = originalColor;
+    }
 
 }

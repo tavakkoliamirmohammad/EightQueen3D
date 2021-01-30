@@ -2,9 +2,10 @@
 #include <fstream>
 #include <sstream>
 
-ObjectModel::ObjectModel(){};
+ObjectModel::ObjectModel() {};
 
-ObjectModel::ObjectModel(const string &path, glm::vec3 position, glm::vec3 color) : Model(position, color) {
+ObjectModel::ObjectModel(const string &path, glm::vec3 position, glm::vec3 color, int &name) : Model(position, color,
+                                                                                                     name) {
     load(path);
     initializeBuffers();
 }

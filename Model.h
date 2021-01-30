@@ -6,19 +6,24 @@
 #include <glm/glm.hpp>
 #include <GL/glut.h>
 #include "Renderable.h"
+#include "Selectable.h"
 
 using namespace std;
 
-class Model : public Renderable {
+class Model : public Renderable, public Selectable {
 public:
     Model();
 
-    Model(glm::vec3 position, glm::vec3 color);
+    Model(glm::vec3 position, glm::vec3 color, int &name);
 
     glm::vec3 position;
     glm::vec3 color;
+    glm::vec3 originalColor;
+    glm::vec3 selectColor = glm::vec3(1, 1, 0);
 
     void render() override;
+
+    void onSelect(bool isSelected) override;
 
 protected:
     void initializeBuffers();

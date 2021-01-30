@@ -84,8 +84,8 @@ void render() {
 void init() {
     glewInit();
     glClearColor(0.6, 0.6, 0.6, 1.0);
-
-    chessGame = ChessGame(1, glm::vec3(-2, 0, -2));
+    int name = 0;
+    chessGame = ChessGame(1, glm::vec3(-2, 0, -2), name);
 //    for (int i = 0; i < 4; i++) {
 //        objs.emplace_back(Queen(glm::vec3(2 * (i - 1.5), 0, 0)));
 //    }

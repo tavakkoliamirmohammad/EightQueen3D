@@ -2,7 +2,7 @@
 
 ChessBoard::ChessBoard() {}
 
-ChessBoard::ChessBoard(float side, glm::vec3 position) {
+ChessBoard::ChessBoard(float side, glm::vec3 position, int &name) {
     this->side = side;
     this->position = position;
     bool pattern = true;
@@ -12,7 +12,7 @@ ChessBoard::ChessBoard(float side, glm::vec3 position) {
         for (int j = 0; j < 8; j++) {
             chessTiles.emplace_back(ChessTile(side, glm::vec3(i * side, 0, j * side),
                                               isBlack ? TileColor::Black
-                                                      : TileColor::White));
+                                                      : TileColor::White, name));
             isBlack = !isBlack;
         }
         pattern = !pattern;

@@ -11,7 +11,7 @@ class ChessGame : Renderable {
 public:
     ChessGame();
 
-    ChessGame(float side, glm::vec3 start);
+    ChessGame(float side, glm::vec3 start, int &name);
 
     void render() override;
 
@@ -22,6 +22,7 @@ private:
     void storePosition(std::pair<int, int> location);
 
     std::pair<int, int> getRandomPosition();
+
 
     std::set<std::pair<int, int>> queenPositions;
     ChessBoard chessBoard;

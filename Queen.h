@@ -7,7 +7,7 @@ class Queen : public ObjectModel {
 public:
     Queen();
 
-    Queen(glm::vec3 position);
+    Queen(glm::vec3 position, int &name);
 };
 
 #endif //CHESSFINALPROJECT_QUEEN_H

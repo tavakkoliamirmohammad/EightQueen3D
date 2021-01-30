@@ -11,7 +11,7 @@ class ChessBoard : public Renderable {
 public:
     ChessBoard();
 
-    ChessBoard(float side, glm::vec3 position);
+    ChessBoard(float side, glm::vec3 position, int &name);
 
     void render() override;
 
