@@ -3,7 +3,8 @@
 #include <GL/glut.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include "ModelLoader.h"
+#include "Model.h"
+#include "Queen.h"
 
 int init_time = 0;
 float camera_theta = 0;
@@ -21,7 +22,7 @@ GLuint vbo_floor_indices = 0;
 
 GLuint fboID, texID, depthID;
 
-vector<ModelLoader> objs;
+vector<Model> objs;
 
 
 void camera_config(int w, int h, float t, float fov) {
@@ -107,7 +108,7 @@ void init() {
     glewInit();
 
     for (int i = 0; i < 4; i++) {
-        objs.emplace_back("untitled.obj", glm::vec3(2 * (i - 1.5), 0, 0), glm::vec3(1, 1, 1));
+        objs.emplace_back(Queen(glm::vec3(2 * (i - 1.5), 0, 0)));
     }
 
     glClearColor(1.0, 1.0, 1.0, 1.0);
