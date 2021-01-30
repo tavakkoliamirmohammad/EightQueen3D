@@ -10,40 +10,30 @@ float camera_theta = 0;
 float camera_fov = 10;
 
 
-#define floor_w 32
-#define floor_h 32
-
-GLfloat floor_vertices[floor_w * floor_h * 3];
-GLuint floor_vertices_indice[(floor_w - 1) * (floor_h - 1) * 4];
-
-GLuint vbo_floor = 0;
-GLuint vbo_floor_indices = 0;
-
-GLuint fboID, texID, depthID;
+#define BUFSIZE 512
 
 ChessGame chessGame;
 
 
-void camera_config(int w, int h, float t, float fov) {
-    glViewport(0, 0, w, h);
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-
-
-    gluPerspective(fov, (float) w / (float) h, 2.0, 500.0);
+void setProjectionMatrix(int w, int h) {
+    gluPerspective(camera_fov, (float) w / (float) h, 2.0, 500.0);
 
     gluLookAt(
             10, 5, 20,  // eye
             0.0, 0.0, 0.0,  // look at
             0.0, 1.0, 0.0); // up
 
-    glRotatef(t, 0, 1, 0);
+    glRotatef(camera_theta, 0, 1, 0);
+}
+
+void camera_config(int w, int h, float t, float fov) {
+    glViewport(0, 0, w, h);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    setProjectionMatrix(w, h);
 }
 
 void render_scene() {
-    glClear(GL_COLOR_BUFFER_BIT);
-    glClear(GL_DEPTH_BUFFER_BIT);
-
 
     glPushAttrib(GL_LINE_BIT);
     glLineWidth(3);
@@ -68,7 +58,56 @@ void render_scene() {
     glPopMatrix();
 }
 
+void processHits(GLint hits, GLuint buffer[]) {
+    unsigned int i, j;
+    GLuint *ptr;
+    float z1, z2;
+    printf("hits = %d\n", hits);
+    if (hits == 0) return;
+
+    ptr = (GLuint *) buffer;
+
+    ptr += (hits - 1) * 4 + 3;
+    cout << *ptr << endl;
+    chessGame.processSelect(*ptr);
+}
+
+void pickItems(int button, int state, int x, int y) {
+    GLuint selectBuf[BUFSIZE];
+    GLint hits;
+    GLint viewport[4];
+    if (button != GLUT_LEFT_BUTTON || state != GLUT_DOWN)
+        return;
+
+    glGetIntegerv(GL_VIEWPORT, viewport);
+    glSelectBuffer(BUFSIZE, selectBuf);
+    glRenderMode(GL_SELECT);
+
+    glInitNames();
+    glPushName(-1);
+
+    glMatrixMode(GL_PROJECTION);
+    glPushMatrix();
+    glLoadIdentity();
+    gluPickMatrix((GLdouble) x, (GLdouble) (viewport[3] - y), 5.0, 5.0, viewport);
+
+    auto w = glutGet(GLUT_WINDOW_WIDTH);
+    auto h = glutGet(GLUT_WINDOW_HEIGHT);
+    setProjectionMatrix(w, h);
+
+    render_scene();
+
+    glPopMatrix();
+    glFlush();
+
+    hits = glRenderMode(GL_RENDER);
+    processHits(hits, selectBuf);
+}
+
+
 void render() {
+    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_DEPTH_BUFFER_BIT);
 
     auto w = glutGet(GLUT_WINDOW_WIDTH);
     auto h = glutGet(GLUT_WINDOW_HEIGHT);
@@ -102,39 +141,6 @@ void init() {
 
 
     init_time = glutGet(GLUT_ELAPSED_TIME);
-
-    for (int i = 0; i < floor_w; i++) {
-        auto x = -floor_w / 2 + i;
-        for (int j = 0; j < floor_h; j++) {
-            auto y = -floor_h / 2 + j;
-
-            floor_vertices[(i * floor_w + j) * 3 + 0] = x;
-            floor_vertices[(i * floor_w + j) * 3 + 1] = 0;
-            floor_vertices[(i * floor_w + j) * 3 + 2] = y;
-        }
-    }
-
-    int id = 0;
-
-    for (int i = 1; i < floor_w; i++) {
-        int from = (i - 1) * floor_h;
-        int to = i * floor_h;
-
-        for (int j = 0; j < floor_h - 1; j++) {
-            floor_vertices_indice[id++] = from++;
-            floor_vertices_indice[id++] = to++;
-            floor_vertices_indice[id++] = to;
-            floor_vertices_indice[id++] = from;
-        }
-    }
-
-    glGenBuffers(1, &vbo_floor);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo_floor);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(floor_vertices), floor_vertices, GL_STATIC_DRAW);
-
-    glGenBuffers(1, &vbo_floor_indices);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo_floor_indices);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(floor_vertices_indice), floor_vertices_indice, GL_STATIC_DRAW);
 
     glEnableClientState(GL_VERTEX_ARRAY);
 
@@ -188,5 +194,6 @@ int main(int argc, char **argv) {
     glutIdleFunc(render);
     glutReshapeFunc(reshape);
     glutSpecialFunc(keyboardFunc);
+    glutMouseFunc(pickItems);
     glutMainLoop();
 }

@@ -6,14 +6,20 @@
 #include "Renderable.h"
 #include "ChessTile.h"
 #include "Queen.h"
+#include "Selectable.h"
 
-class ChessBoard : public Renderable {
+
+class ChessBoard : public Renderable, public Selectable {
 public:
     ChessBoard();
 
     ChessBoard(float side, glm::vec3 position, int &name);
 
     void render() override;
+
+    void onSelect(bool isSelected) override;
+
+    void processSelect(GLuint name) override;
 
 private:
     float side;

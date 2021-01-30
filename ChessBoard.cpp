@@ -2,7 +2,7 @@
 
 ChessBoard::ChessBoard() {}
 
-ChessBoard::ChessBoard(float side, glm::vec3 position, int &name) {
+ChessBoard::ChessBoard(float side, glm::vec3 position, int &name) : Selectable(name) {
     this->side = side;
     this->position = position;
     bool pattern = true;
@@ -26,4 +26,14 @@ void ChessBoard::render() {
         tile.render();
     }
     glPopMatrix();
+}
+
+void ChessBoard::processSelect(GLuint name) {
+    for (auto &tile : chessTiles) {
+        tile.processSelect(name);
+    }
+}
+
+void ChessBoard::onSelect(bool isSelected) {
+
 }

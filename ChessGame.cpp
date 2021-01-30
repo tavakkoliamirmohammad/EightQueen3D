@@ -47,4 +47,16 @@ void ChessGame::render() {
     }
 }
 
+void ChessGame::processSelect(GLuint name) {
+    chessBoard.processSelect(name);
+
+    for (auto queen: queens) {
+        queen.processSelect(name);
+    }
+}
+
+void ChessGame::onSelect(bool isSelected) {
+
+}
+
 

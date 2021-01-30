@@ -1,6 +1,8 @@
 #include "GL/glew.h"
 #include "Model.h"
+#include <iostream>
 
+using namespace std;
 
 Model::Model() {
     this->position = glm::vec3(0, 0, 0);
@@ -27,11 +29,33 @@ void Model::initializeBuffers() {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indices_VBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLuint), &indices[0], GL_STATIC_DRAW);
 
+    glGenBuffers(1, &color_VBO);
+
+    changeColor(color);
+
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
+
+void Model::changeColor(glm::vec3 color) {
+    colors.clear();
+
+    for (int i = 0; i < vertices.size(); i++) {
+        colors.emplace_back(glm::vec4(color, 1));
+    }
+
+    this->color = color;
+
+    glBindBuffer(GL_ARRAY_BUFFER, color_VBO);
+    glBufferData(GL_ARRAY_BUFFER, colors.size() * sizeof(glm::vec4), &colors[0], GL_DYNAMIC_DRAW);
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
+
 void Model::render() {
+    glLoadName(selectName);
     glPushMatrix();
     glTranslatef(position.x, position.y, position.z);
     glColor4f(color.x, color.y, color.z, 1);
@@ -42,16 +66,22 @@ void Model::render() {
     glColorMaterial(GL_FRONT, GL_AMBIENT);
 
     glEnableClientState(GL_NORMAL_ARRAY);
+    glEnableClientState(GL_COLOR_ARRAY);
 
     glBindBuffer(GL_ARRAY_BUFFER, vertex_VBO);
     glVertexPointer(3, GL_FLOAT, 0, nullptr);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indices_VBO);
+
+    glBindBuffer(GL_ARRAY_BUFFER, color_VBO);
+    glColorPointer(4, GL_FLOAT, 0, NULL);
 
     glBindBuffer(GL_ARRAY_BUFFER, normal_VBO);
     glNormalPointer(GL_FLOAT, 0, nullptr);
 
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indices_VBO);
     glDrawElements(GL_QUADS, indices.size(), GL_UNSIGNED_INT, nullptr);
+
     glDisableClientState(GL_NORMAL_ARRAY);
+    glDisableClientState(GL_COLOR_ARRAY);
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
@@ -61,10 +91,15 @@ void Model::render() {
 }
 
 void Model::onSelect(bool isSelected) {
+    this->isSelected = isSelected;
     if (isSelected) {
-        color = selectColor;
+        changeColor(selectColor);
     } else {
-        color = originalColor;
+        changeColor(originalColor);
     }
 
+}
+
+void Model::processSelect(GLuint name) {
+    onSelect(selectName == name);
 }

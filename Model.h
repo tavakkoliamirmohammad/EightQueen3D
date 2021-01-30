@@ -17,13 +17,16 @@ public:
     Model(glm::vec3 position, glm::vec3 color, int &name);
 
     glm::vec3 position;
-    glm::vec3 color;
     glm::vec3 originalColor;
     glm::vec3 selectColor = glm::vec3(1, 1, 0);
+
+    void changeColor(glm::vec3 color);
 
     void render() override;
 
     void onSelect(bool isSelected) override;
+
+    void processSelect(GLuint name) override;
 
 protected:
     void initializeBuffers();
@@ -37,7 +40,14 @@ protected:
     GLuint vertex_VBO;
     GLuint normal_VBO;
     GLuint indices_VBO;
+    GLuint color_VBO;
     vector<GLuint> indices;
+
+    bool isSelected = false;
+
+private:
+    glm::vec3 color;
+    vector<glm::vec4> colors;
 
 
 };
