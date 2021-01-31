@@ -19,6 +19,7 @@ public:
     void render() override;
 
     bool isPositionAvailable(std::pair<int, int> location);
+
     bool isPositionAvailable(ChessTile chessTile);
 
 protected:
@@ -28,13 +29,19 @@ private:
 
     void storePosition(std::pair<int, int> location);
 
-    std::pair<int, int> getRandomPosition();
+    void deletePosition(std::pair<int, int> location);
+
+    glm::vec3 getQueenLocation(std::pair<int, int> location) const;
+
+    static std::pair<int, int> getRandomPosition();
 
 
     std::set<std::pair<int, int>> queenPositions;
+    glm::vec3 start;
+    float side;
     ChessBoard chessBoard;
     std::vector<Queen> queens;
-    Selectable *selectedQueen;
+    Selectable *selectedQueen = nullptr;
 
 };
 
