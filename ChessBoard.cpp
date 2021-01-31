@@ -28,10 +28,15 @@ void ChessBoard::render() {
     glPopMatrix();
 }
 
-void ChessBoard::processSelect(GLuint name) {
+Selectable * ChessBoard::processSelect(GLuint name) {
+    Selectable *selectable = nullptr;
+    Selectable *temp;
+
     for (auto &tile : chessTiles) {
-        tile.processSelect(name);
+        temp = tile.processSelect(name);
+        if (temp != nullptr) selectable = temp;
     }
+    return selectable;
 }
 
 void ChessBoard::onSelect(bool isSelected) {

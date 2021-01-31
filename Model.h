@@ -26,7 +26,7 @@ public:
 
     void onSelect(bool isSelected) override;
 
-    void processSelect(GLuint name) override;
+    Selectable * processSelect(GLuint name) override;
 
 protected:
     void initializeBuffers();

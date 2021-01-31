@@ -100,10 +100,12 @@ void Model::onSelect(bool isSelected) {
 
 }
 
-void Model::processSelect(GLuint name) {
+Selectable * Model::processSelect(GLuint name) {
     if (selectName == name) {
         onSelect(!isSelected);
+        return this;
     } else {
         onSelect(false);
+        return nullptr;
     }
 }

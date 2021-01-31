@@ -47,17 +47,37 @@ void ChessGame::render() {
     }
 }
 
-void ChessGame::processSelect(GLuint name) {
-    cout << name << endl;
-    chessBoard.processSelect(name);
+Selectable *ChessGame::processSelect(GLuint name) {
+    Selectable *selectable = nullptr;
+    Selectable *temp;
+    ChessTile *chessTile;
 
-    for (auto& queen: queens) {
-        queen.processSelect(name);
+    temp = chessBoard.processSelect(name);
+    if (temp != nullptr) {
+        selectable = temp;
+        chessTile = dynamic_cast<ChessTile *>(selectable);
+        if (selectedQueen && isPositionAvailable(*chessTile)) {
+            cout << "clicked" << endl;
+        }
+        selectedQueen = nullptr;
+
     }
+    for (auto &queen: queens) {
+        temp = queen.processSelect(name);
+        if (temp != nullptr) {
+            selectable = temp;
+            selectedQueen = selectable;
+        }
+    }
+    return selectable;
 }
 
 void ChessGame::onSelect(bool isSelected) {
 
+}
+
+bool ChessGame::isPositionAvailable(ChessTile chessTile) {
+    return isPositionAvailable(make_pair(chessTile.position.x, chessTile.position.y));
 }
 
 

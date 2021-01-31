@@ -14,7 +14,7 @@ protected:
 
     virtual void onSelect(bool isSelected) = 0;
 
-    virtual void processSelect(GLuint name) = 0;
+    virtual Selectable * processSelect(GLuint name) = 0;
 };
 
 #endif //CHESSFINALPROJECT_SELECTABLE_H

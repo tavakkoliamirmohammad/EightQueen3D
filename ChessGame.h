@@ -14,15 +14,17 @@ public:
 
     ChessGame(float side, glm::vec3 start, int &name);
 
-    void processSelect(GLuint name) override;
+    Selectable *processSelect(GLuint name) override;
 
     void render() override;
+
+    bool isPositionAvailable(std::pair<int, int> location);
+    bool isPositionAvailable(ChessTile chessTile);
 
 protected:
     void onSelect(bool isSelected) override;
 
 private:
-    bool isPositionAvailable(std::pair<int, int> location);
 
     void storePosition(std::pair<int, int> location);
 
@@ -32,6 +34,7 @@ private:
     std::set<std::pair<int, int>> queenPositions;
     ChessBoard chessBoard;
     std::vector<Queen> queens;
+    Selectable *selectedQueen;
 
 };
 

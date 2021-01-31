@@ -19,7 +19,7 @@ public:
 
     void onSelect(bool isSelected) override;
 
-    void processSelect(GLuint name) override;
+    Selectable * processSelect(GLuint name) override;
 
 private:
     float side;
