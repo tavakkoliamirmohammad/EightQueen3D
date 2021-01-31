@@ -101,5 +101,9 @@ void Model::onSelect(bool isSelected) {
 }
 
 void Model::processSelect(GLuint name) {
-    onSelect(selectName == name);
+    if (selectName == name) {
+        onSelect(!isSelected);
+    } else {
+        onSelect(false);
+    }
 }

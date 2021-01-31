@@ -59,7 +59,9 @@ void render_scene() {
 }
 
 void processHits(GLint hits, GLuint buffer[]) {
-    if (hits == 0) return;
+    if (hits == 0) {
+        chessGame.processSelect(-1);
+    }
     unsigned int i, j;
     GLuint names, *ptr, minZ, *ptrNames;
 

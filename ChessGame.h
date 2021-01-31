@@ -15,10 +15,11 @@ public:
     ChessGame(float side, glm::vec3 start, int &name);
 
     void processSelect(GLuint name) override;
-    void onSelect(bool isSelected) override;
 
     void render() override;
 
+protected:
+    void onSelect(bool isSelected) override;
 
 private:
     bool isPositionAvailable(std::pair<int, int> location);

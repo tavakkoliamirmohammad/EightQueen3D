@@ -51,7 +51,7 @@ void ChessGame::processSelect(GLuint name) {
     cout << name << endl;
     chessBoard.processSelect(name);
 
-    for (auto queen: queens) {
+    for (auto& queen: queens) {
         queen.processSelect(name);
     }
 }
