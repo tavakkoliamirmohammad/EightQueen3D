@@ -29,9 +29,9 @@ void Queen::update(int time) {
 
         } else if (movingState == MovingState::Forwarding) {
             glm::vec3 direction = destination - position;
-            glm::vec3 displacment = glm::vec3(direction.x, 0, direction.z);
-            if (glm::length(displacment) > 0.05f) {
-                position += (glm::normalize(displacment) * 0.1f);
+            glm::vec3 displacement = glm::vec3(direction.x, 0, direction.z);
+            if (glm::length(displacement) > 0.05f) {
+                position += (glm::normalize(displacement) * 0.1f);
             } else {
                 movingState = MovingState::Falling;
             }

@@ -7,7 +7,7 @@
 
 int init_time = 0;
 float camera_theta = 0;
-float camera_fov = 10;
+float camera_fov = 20;
 
 
 #define BUFSIZE 512
@@ -19,7 +19,7 @@ void setProjectionMatrix(int w, int h) {
     gluPerspective(camera_fov, (float) w / (float) h, 2.0, 500.0);
 
     gluLookAt(
-            10, 5, 20,  // eye
+            10, 10, 20,  // eye
             0.0, 0.0, 0.0,  // look at
             0.0, 1.0, 0.0); // up
 
@@ -122,7 +122,7 @@ void init() {
     glewInit();
     glClearColor(0.6, 0.6, 0.6, 1.0);
     int name = 0;
-    chessGame = ChessGame(1, glm::vec3(-2, 0, -2), name);
+    chessGame = ChessGame(1, glm::vec3(-4, 0, -4), name);
 //    for (int i = 0; i < 4; i++) {
 //        objs.emplace_back(Queen(glm::vec3(2 * (i - 1.5), 0, 0)));
 //    }
