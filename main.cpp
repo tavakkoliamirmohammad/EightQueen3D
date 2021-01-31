@@ -59,16 +59,22 @@ void render_scene() {
 }
 
 void processHits(GLint hits, GLuint buffer[]) {
-    unsigned int i, j;
-    GLuint *ptr;
-    float z1, z2;
-    printf("hits = %d\n", hits);
     if (hits == 0) return;
+    unsigned int i, j;
+    GLuint names, *ptr, minZ, *ptrNames;
 
     ptr = (GLuint *) buffer;
-
-    ptr += (hits - 1) * 4 + 3;
-    cout << *ptr << endl;
+    minZ = 0xffffffff;
+    for (i = 0; i < hits; i++) {
+        names = *ptr;
+        ptr++;
+        if (*ptr < minZ) {
+            minZ = *ptr;
+            ptrNames = ptr + 2;
+        }
+        ptr += names + 2;
+    }
+    ptr = ptrNames;
     chessGame.processSelect(*ptr);
 }
 
@@ -89,7 +95,7 @@ void pickItems(int button, int state, int x, int y) {
     glMatrixMode(GL_PROJECTION);
     glPushMatrix();
     glLoadIdentity();
-    gluPickMatrix((GLdouble) x, (GLdouble) (viewport[3] - y), 10.0, 10.0, viewport);
+    gluPickMatrix((GLdouble) x, (GLdouble) (viewport[3] - y), 5.0, 5.0, viewport);
 
     auto w = glutGet(GLUT_WINDOW_WIDTH);
     auto h = glutGet(GLUT_WINDOW_HEIGHT);

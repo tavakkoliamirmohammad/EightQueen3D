@@ -48,6 +48,7 @@ void ChessGame::render() {
 }
 
 void ChessGame::processSelect(GLuint name) {
+    cout << name << endl;
     chessBoard.processSelect(name);
 
     for (auto queen: queens) {
