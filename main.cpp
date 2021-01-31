@@ -34,23 +34,6 @@ void camera_config(int w, int h, float t, float fov) {
 }
 
 void render_scene() {
-
-    glPushAttrib(GL_LINE_BIT);
-    glLineWidth(3);
-    glBegin(GL_LINES);
-    glColor3f(1.0, 0, 0);
-    glVertex3f(0, 0, 0);
-    glVertex3f(50, 0, 0);
-    glColor3f(0, 1.0, 0);
-    glVertex3f(0, 0, 0);
-    glVertex3f(0, 50, 0);
-    glColor3f(0, 0, 1.0);
-    glVertex3f(0, 0, 0);
-    glVertex3f(0, 0, 50);
-    glEnd();
-    glPopAttrib();
-
-
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
     glPushMatrix();
@@ -112,6 +95,13 @@ void pickItems(int button, int state, int x, int y) {
     processHits(hits, selectBuf);
 }
 
+void timer(int value) {
+
+    auto current_time = glutGet(GLUT_ELAPSED_TIME);
+
+    chessGame.update(current_time);
+    glutTimerFunc(25, timer, value + 1);
+}
 
 void render() {
     glClear(GL_COLOR_BUFFER_BIT);
@@ -203,5 +193,6 @@ int main(int argc, char **argv) {
     glutReshapeFunc(reshape);
     glutSpecialFunc(keyboardFunc);
     glutMouseFunc(pickItems);
+    glutTimerFunc(25, timer, 0);
     glutMainLoop();
 }

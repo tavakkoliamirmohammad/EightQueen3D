@@ -22,6 +22,8 @@ public:
 
     bool isPositionAvailable(ChessTile chessTile);
 
+    void update(int time);
+
 protected:
     void onSelect(bool isSelected) override;
 

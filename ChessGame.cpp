@@ -97,4 +97,10 @@ glm::vec3 ChessGame::getQueenLocation(std::pair<int, int> location) const {
     return glm::vec3(location.first * side, 0, location.second * side);
 }
 
+void ChessGame::update(int time) {
+    for (auto &queen: queens) {
+        queen.update(time);
+    }
+}
+
 

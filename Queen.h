@@ -11,6 +11,7 @@ public:
     Queen(glm::vec3 position, int &name);
 
     void onStartMove(glm::vec3 destination) override;
+    void update(int time) override;
 };
 
 #endif //CHESSFINALPROJECT_QUEEN_H
