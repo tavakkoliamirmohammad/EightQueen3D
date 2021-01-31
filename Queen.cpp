@@ -24,7 +24,7 @@ void Queen::update(int time) {
                 movingState = MovingState::Forwarding;
                 startTime = time;
             } else {
-                position.y += difference_time * 0.1;
+                position.y += difference_time * 0.2;
             }
 
         } else if (movingState == MovingState::Forwarding) {
@@ -37,10 +37,11 @@ void Queen::update(int time) {
             }
 
         } else if (movingState == MovingState::Falling) {
-            if (position.y < 0.15) {
+            if (position.y < 0.1) {
                 movingState = MovingState::Stopped;
+                position.y = 0;
             } else {
-                position.y -= difference_time * 0.1;
+                position.y -= difference_time * 0.2;
             }
         }
     }

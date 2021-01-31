@@ -5,7 +5,6 @@
 #include <glm/gtc/type_ptr.hpp>
 #include "ChessGame.h"
 
-int init_time = 0;
 float camera_theta = 0;
 float camera_fov = 20;
 
@@ -123,12 +122,6 @@ void init() {
     glClearColor(0.6, 0.6, 0.6, 1.0);
     int name = 0;
     chessGame = ChessGame(1, glm::vec3(-4, 0, -4), name);
-//    for (int i = 0; i < 4; i++) {
-//        objs.emplace_back(Queen(glm::vec3(2 * (i - 1.5), 0, 0)));
-//    }
-//
-//    chessBoard = ChessBoard(1, glm::vec3(3, 0, 0));
-
 
     glEnable(GL_DEPTH_TEST);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -136,9 +129,6 @@ void init() {
     glEnable(GL_BLEND);
 
     glShadeModel(GL_SMOOTH);
-
-
-    init_time = glutGet(GLUT_ELAPSED_TIME);
 
     glEnableClientState(GL_VERTEX_ARRAY);
 

@@ -35,6 +35,10 @@ private:
 
     glm::vec3 getQueenLocation(std::pair<int, int> location) const;
 
+    std::pair<int, int> getQueenLocation(Queen queen) const;
+
+    void queenThreatChecking(  int i, int j);
+
     static std::pair<int, int> getRandomPosition();
 
 

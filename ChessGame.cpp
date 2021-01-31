@@ -75,6 +75,12 @@ Selectable *ChessGame::processSelect(GLuint name) {
         }
         selectedQueen = nullptr;
     }
+    for (int i = 0; i < 8; ++i) {
+        for (int j = 0; j < 8; ++j) {
+            if (i == j) continue;
+            queenThreatChecking(i, j);
+        }
+    }
     for (auto &queen: queens) {
         temp = queen.processSelect(name);
         if (temp != nullptr) {
@@ -100,6 +106,32 @@ glm::vec3 ChessGame::getQueenLocation(std::pair<int, int> location) const {
 void ChessGame::update(int time) {
     for (auto &queen: queens) {
         queen.update(time);
+    }
+}
+
+
+std::pair<int, int> ChessGame::getQueenLocation(Queen queen) const {
+    return make_pair(queen.position.x / side, queen.position.z / side);
+}
+
+void ChessGame::queenThreatChecking(int i, int j) {
+    auto q1Location = getQueenLocation(queens[i]);
+    auto q2Location = getQueenLocation(queens[j]);
+    if (q1Location.first == q2Location.first || q1Location.second == q2Location.second) {
+        cout << "here" << endl;
+        queens[i].changeColor(glm::vec3(1, 0, 0));
+        cout << "CCCCCCCCCCC" << endl;
+        cout << queens[i].color.x << queens[i].color.y << queens[i].color.z << endl;
+
+        return;
+    }
+    float m = float(q2Location.second - q1Location.second) / (q2Location.first - q1Location.first);
+    if (abs(m) == 1) {
+        cout << "here" << endl;
+        queens[i].changeColor(glm::vec3(1, 0, 0));
+        cout << "CCCCCCCCCCC" << endl;
+        cout << queens[i].color.x << queens[i].color.y << queens[i].color.z << endl;
+        return;
     }
 }
 

@@ -27,6 +27,7 @@ public:
     void onSelect(bool isSelected) override;
 
     Selectable * processSelect(GLuint name) override;
+    glm::vec3 color;
 
 protected:
     void initializeBuffers();
@@ -46,7 +47,6 @@ protected:
     bool isSelected = false;
 
 private:
-    glm::vec3 color;
     vector<glm::vec4> colors;
 
 
