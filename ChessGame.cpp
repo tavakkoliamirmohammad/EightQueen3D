@@ -156,5 +156,6 @@ bool ChessGame::checkIsMoveAvailable(const Queen &queen, ChessTile chessTile) {
     if (abs(abs(m) - 1) < 0.1) {
         return true;
     }
+    chessTile.changeColor(glm::vec3(1, 0, 0));
     return false;
 }
