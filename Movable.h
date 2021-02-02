@@ -14,7 +14,7 @@ public:
     virtual void update(int time) = 0;
 
 protected:
-    virtual void onStartMove(glm::vec3 destination) = 0;
+    virtual void onStartMove(glm::vec3 destination, bool *finished) = 0;
 
     glm::vec3 destination;
     MovingState movingState = MovingState::Stopped;

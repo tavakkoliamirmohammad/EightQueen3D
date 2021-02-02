@@ -8,10 +8,11 @@ Queen::Queen(glm::vec3 position, int &name) : ObjectModel("queen.obj", position,
 
 }
 
-void Queen::onStartMove(glm::vec3 destination) {
+void Queen::onStartMove(glm::vec3 destination, bool *finished) {
     this->destination = destination;
     movingState = MovingState::Rising;
     startTime = glutGet(GLUT_ELAPSED_TIME);
+    this->finished = finished;
 }
 
 void Queen::update(int time) {
@@ -40,9 +41,21 @@ void Queen::update(int time) {
             if (position.y < 0.1) {
                 movingState = MovingState::Stopped;
                 position.y = 0;
+                *(this->finished) = true;
             } else {
                 position.y -= difference_time * 0.2;
             }
         }
+    }
+}
+
+void Queen::onSelect(bool isSelected) {
+    this->isSelected = isSelected;
+    if (isSelected) {
+        changeColor(selectColor);
+    } else if (!isUnderThreat) {
+        changeColor(originalColor);
+    } else {
+        changeColor(glm::vec3(1, 0, 0));
     }
 }

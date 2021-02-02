@@ -37,7 +37,10 @@ private:
 
     std::pair<int, int> getQueenLocation(Queen queen) const;
 
-    void queenThreatChecking(  int i, int j);
+    void queenThreatChecking(int i, int j);
+
+    void checkAllQueensThreat();
+
 
     static std::pair<int, int> getRandomPosition();
 
@@ -48,6 +51,7 @@ private:
     ChessBoard chessBoard;
     std::vector<Queen> queens;
     Selectable *selectedQueen = nullptr;
+    bool isBoardNeedUpdating = false;
 
 };
 

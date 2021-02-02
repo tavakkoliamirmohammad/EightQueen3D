@@ -19,6 +19,7 @@ ChessGame::ChessGame(float side, glm::vec3 start, int &name) {
         storePosition(location);
         queens.emplace_back(Queen(getQueenLocation(location), name));
     }
+    checkAllQueensThreat();
 }
 
 bool ChessGame::isPositionAvailable(std::pair<int, int> location) {
@@ -46,6 +47,10 @@ std::pair<int, int> ChessGame::getRandomPosition() {
 
 void ChessGame::render() {
     chessBoard.render();
+    if (isBoardNeedUpdating) {
+        checkAllQueensThreat();
+        isBoardNeedUpdating = false;
+    }
     glLoadIdentity();
     glPushMatrix();
     glTranslatef(start.x, start.y, start.z);
@@ -71,15 +76,9 @@ Selectable *ChessGame::processSelect(GLuint name) {
             deletePosition(make_pair(queen->position.x, queen->position.z));
             auto location = make_pair(chessTile->position.x, chessTile->position.z);
             storePosition(location);
-            queen->onStartMove(getQueenLocation(location));
+            queen->onStartMove(getQueenLocation(location), &isBoardNeedUpdating);
         }
         selectedQueen = nullptr;
-    }
-    for (int i = 0; i < 8; ++i) {
-        for (int j = 0; j < 8; ++j) {
-            if (i == j) continue;
-            queenThreatChecking(i, j);
-        }
     }
     for (auto &queen: queens) {
         temp = queen.processSelect(name);
@@ -96,7 +95,7 @@ void ChessGame::onSelect(bool isSelected) {
 }
 
 bool ChessGame::isPositionAvailable(ChessTile chessTile) {
-    return isPositionAvailable(make_pair(chessTile.position.x, chessTile.position.y));
+    return isPositionAvailable(make_pair(chessTile.position.x, chessTile.position.z));
 }
 
 glm::vec3 ChessGame::getQueenLocation(std::pair<int, int> location) const {
@@ -111,28 +110,36 @@ void ChessGame::update(int time) {
 
 
 std::pair<int, int> ChessGame::getQueenLocation(Queen queen) const {
-    return make_pair(queen.position.x / side, queen.position.z / side);
+    float qx = queen.position.x / side;
+    float qz = queen.position.z / side;
+    return make_pair((qx - int(qx)) >= 0.5 ? (int(qx) + 1) : int(qx), (qz - int(qz)) >= 0.5 ? (int(qz) + 1) : int(qz));
 }
 
 void ChessGame::queenThreatChecking(int i, int j) {
     auto q1Location = getQueenLocation(queens[i]);
     auto q2Location = getQueenLocation(queens[j]);
     if (q1Location.first == q2Location.first || q1Location.second == q2Location.second) {
-        cout << "here" << endl;
         queens[i].changeColor(glm::vec3(1, 0, 0));
-        cout << "CCCCCCCCCCC" << endl;
-        cout << queens[i].color.x << queens[i].color.y << queens[i].color.z << endl;
-
+        queens[i].isUnderThreat = true;
         return;
     }
     float m = float(q2Location.second - q1Location.second) / (q2Location.first - q1Location.first);
-    if (abs(m) == 1) {
-        cout << "here" << endl;
+    if (abs(abs(m) - 1) < 0.1) {
         queens[i].changeColor(glm::vec3(1, 0, 0));
-        cout << "CCCCCCCCCCC" << endl;
-        cout << queens[i].color.x << queens[i].color.y << queens[i].color.z << endl;
+        queens[i].isUnderThreat = true;
         return;
     }
 }
 
-
+void ChessGame::checkAllQueensThreat() {
+    for (auto &queen: queens) {
+        queen.isUnderThreat = false;
+        queen.changeColor(queen.originalColor);
+    }
+    for (int i = 0; i < 8; ++i) {
+        for (int j = 0; j < 8; ++j) {
+            if (i == j) continue;
+            queenThreatChecking(i, j);
+        }
+    }
+}
