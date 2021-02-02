@@ -35,15 +35,16 @@ private:
 
     glm::vec3 getQueenLocation(std::pair<int, int> location) const;
 
-    std::pair<int, int> getQueenLocation(Queen queen) const;
+    std::pair<int, int> getIndexLocation(glm::vec3 loc) const;
 
     void queenThreatChecking(int i, int j);
+
+    bool checkIsMoveAvailable(const Queen &queen, ChessTile chessTile);
 
     void checkAllQueensThreat();
 
 
     static std::pair<int, int> getRandomPosition();
-
 
     std::set<std::pair<int, int>> queenPositions;
     glm::vec3 start;

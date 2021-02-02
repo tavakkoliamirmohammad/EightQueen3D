@@ -73,10 +73,12 @@ Selectable *ChessGame::processSelect(GLuint name) {
         chessTile = dynamic_cast<ChessTile *>(selectable);
         if (selectedQueen != nullptr && isPositionAvailable(*chessTile)) {
             auto *queen = dynamic_cast<Queen *>(selectedQueen);
-            deletePosition(make_pair(queen->position.x, queen->position.z));
-            auto location = make_pair(chessTile->position.x, chessTile->position.z);
-            storePosition(location);
-            queen->onStartMove(getQueenLocation(location), &isBoardNeedUpdating);
+            if (checkIsMoveAvailable(*queen, *chessTile)) {
+                deletePosition(make_pair(queen->position.x, queen->position.z));
+                auto location = make_pair(chessTile->position.x, chessTile->position.z);
+                storePosition(location);
+                queen->onStartMove(getQueenLocation(location), &isBoardNeedUpdating);
+            }
         }
         selectedQueen = nullptr;
     }
@@ -109,15 +111,15 @@ void ChessGame::update(int time) {
 }
 
 
-std::pair<int, int> ChessGame::getQueenLocation(Queen queen) const {
-    float qx = queen.position.x / side;
-    float qz = queen.position.z / side;
+std::pair<int, int> ChessGame::getIndexLocation(glm::vec3 loc) const {
+    float qx = loc.x / side;
+    float qz = loc.z / side;
     return make_pair((qx - int(qx)) >= 0.5 ? (int(qx) + 1) : int(qx), (qz - int(qz)) >= 0.5 ? (int(qz) + 1) : int(qz));
 }
 
 void ChessGame::queenThreatChecking(int i, int j) {
-    auto q1Location = getQueenLocation(queens[i]);
-    auto q2Location = getQueenLocation(queens[j]);
+    auto q1Location = getIndexLocation(queens[i].position);
+    auto q2Location = getIndexLocation(queens[j].position);
     if (q1Location.first == q2Location.first || q1Location.second == q2Location.second) {
         queens[i].changeColor(glm::vec3(1, 0, 0));
         queens[i].isUnderThreat = true;
@@ -142,4 +144,17 @@ void ChessGame::checkAllQueensThreat() {
             queenThreatChecking(i, j);
         }
     }
+}
+
+bool ChessGame::checkIsMoveAvailable(const Queen &queen, ChessTile chessTile) {
+    auto q1Location = getIndexLocation(queen.position);
+    auto q2Location = getIndexLocation(chessTile.position);
+    if (q1Location.first == q2Location.first || q1Location.second == q2Location.second) {
+        return true;
+    }
+    float m = float(q2Location.second - q1Location.second) / (q2Location.first - q1Location.first);
+    if (abs(abs(m) - 1) < 0.1) {
+        return true;
+    }
+    return false;
 }
